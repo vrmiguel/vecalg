@@ -22,18 +22,26 @@ class vector:
 			for i in args[0]:
 				if not isinstance(i, (int, float)):
 					raise ValueError("vector initialization needs numeric values.")
-			self.elems = [arg for arg in args[0]]
+			self.elems = args[0]
 		elif isinstance(args[0], (int, float)):
 			for arg in args:
 				if not isinstance(arg, (int, float)):  	# If the first given argument was a number, but a non-number is also found, then raise an exception
-					raise ValueException("can't construct vector with types int/float and {%s}" % type(arg))
+					raise ValueError("vector initialization needs numeric values.")
 			self.elems = [x for x in args]
 		else: raise Exception("type ", str(type(args[0])), " unknown for vector construction")
 
+	"""
+	Allows converting vectors to string, as used in print(), for example.
+
+	Makes lists like [x, y] be printed as <x, y>, in order to adhere to the usual American nomenclature of vectors.
+	If '[' and ']', are preferred, remove the replaces below. If '(' and ')', change '<' to '(' and so on.
+
+	"""
 	def __str__(self):
 		return str(self.elems).replace('[', '<').replace(']', '>')
 
 	def __repr__(self):
+		""" Allows for string representation of vectors. Mostly only used by Python's REPL. """
 		return str(self)
 
 	def __add__(self, operand):
