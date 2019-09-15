@@ -52,18 +52,21 @@ class vector:
 				raise ValueException("can't add vectors of different size.")			
 		else: raise ValueException("unknown operation.")
 
-	#	TODO: make multiplication transitive
 	def __mul__(self, operand):
+		''' Multiplication of vector to scalar, if operand is a number, or dot product, if operand is a vector. '''
+		
 		if isinstance(operand, (int, float)):
 			return vector([elem * operand for elem in self.elems]) # Return multiplication by scalar
 		elif isinstance(operand, vector):
 			if len(operand.elems) != len(self.elems):
 				raise ValueException("can't multiply")
 			else:
-				return vector([x*y for x, y in zip(self.elems, operand.elems)])
+				return vector([x*y for x, y in zip(self.elems, operand.elems)]) # Return dot product.
 
 	def __rmul__(self, operand):
+		''' Needed in order to make multiplication commutative and transitive. '''
 		return self * operand
+	
 
 	'''
 	def __eq__(self, operand):
