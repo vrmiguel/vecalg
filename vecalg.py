@@ -4,26 +4,25 @@ Vinícius Rodrigues Miguel - Federal University of São Paulo
 github.com/vrmiguel/vecalg
 '''
 
-norm_type = "l2" 		# You can modify this in order to select either the Euclidean norm ("l2") or the Manhattan distance ("l1").
-
-def set_norm(selection):
-		if (isinstance(selection, str)):
-			if selection.lower() == 'l1' or selection.lower() == 'manhattan':
-				norm_type = 'l1'
-			elif selection.lower() == 'l2' or selection.lower() == 'euclidean':
-				norm_type = 'l2'
-			else:
-				print("Unknown norm. Euclidean norm will be assumed.")
-				norm_type = 'l2'
-		else:
-			return TypeError()
-
 class vector:
+	norm_type = "l2" 		# You can modify this in order to select either the Euclidean norm ("l2") or the Manhattan distance ("l1").
 	elems = []
 
+	"""
+	Constructor for the vector class
+
+	Accepts several input types. You can initialize vectors with many numbers, for example: vector(2, 3, 4) or vector(2, 0).
+	You can also initialize vectors with lists of numbers, that is, vector([2, 3, 4]) is valid, however, mixing both is not allowed, like in
+	vector(2, 3, [4, 5, 6]).
+
+	"""
 	def __init__(self, *args):
 		if isinstance(args[0], list):
-			self.elems = [arg for arg in args][0]
+			print(args[0])
+			for i in args[0]:
+				if not isinstance(i, (int, float)):
+					raise ValueError("vector initialization needs numeric values.")
+			self.elems = [arg for arg in args[0]]
 		elif isinstance(args[0], (int, float)):
 			for arg in args:
 				if not isinstance(arg, (int, float)):  	# If the first given argument was a number, but a non-number is also found, then raise an exception
@@ -76,9 +75,9 @@ class vector:
 		else: raise TypeException()		
 
 	def norm(self):
-		if norm_type == 'l2':
+		if self.norm_type == 'l2':
 			return sum([elem**2 for elem in self.elems])**0.5 	# Return the L2-norm, that is, the Euclidean norm of the given vector
-		elif norm_type == 'l1':
+		elif self.norm_type == 'l1':
 			return sum([abs(elem) for elem in self.elems])		# Return the L1-norm, that is, the Manhattan distance of the given vector
 		else:
 			raise ValueError("unknown norm type")
@@ -87,13 +86,13 @@ class vector:
 		return self.norm()
 
 	def to_unit_vector(self):
-		if norm_type == 'l1':
-			norm_type = l2
-			norm_ = self.norm()
-			norm_type = 'l1'
+		if self.norm_type == 'l1':
+			self.norm_type = l2
+			self.norm_ = self.norm()
+			self.norm_type = 'l1'
 			return self/norm_
-		elif norm_type == 'l2':
-			return self/norm_
+		elif self.norm_type == 'l2':
+			return self/self.norm()
 		else:
 			raise ValueError("unknown norm_type")
 
@@ -106,7 +105,8 @@ class vector:
 				norm_type = 'l1'
 			elif selection.lower() == 'l2' or selection.lower() == 'euclidean':
 				norm_type = 'l2'
-			print("Unknown norm. Euclidean norm will be assumed.")
+			else: 
+				print("Unknown norm. Euclidean norm will be assumed.")
 				norm_type = 'l2'
 		else:
 			return TypeError()
